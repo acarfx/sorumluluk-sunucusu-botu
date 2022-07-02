@@ -22,26 +22,6 @@ let y_roles = new Map([
     ["MAİN SUNUCUDA Kİ ROL ID", "YETKİLİ SUNUCUSUNDA Kİ ROL İD"],
   ])
 
-
-
-client.on('guildMemberRoleRemove', async (member, role) => {
-    if(member.guild.id != ids.main) return;
-    let guild = client.guilds.cache.get(ids.main)
-    if(!guild) return;
-    let entry = await guild.fetchAuditLogs({type: 'MEMBER_ROLE_UPDATE'}).then(audit => audit.entries.first());
-    if(!entry || !entry.executor || entry.createdTimestamp <= Date.now() - 5000) return;
-    let veren = guild.members.cache.get(entry.executor.id)
-    if(veren.user.bot) return;
-    let checkRole = _roles.get(role.id);
-    if(checkRole) {
-        if(checkRole.some(x => veren.roles.cache.has(x))) return;
-        member.roles.add(role.id).catch(err => {})
-        setTimeout(() => {
-            member.roles.add(role.id).catch(err => {})
-        }, 2000);
-    }; 
-})
-
 client.on("guildMemberRoleAdd", (member, role) => {
     if(member.guild.id != ids.main) return;
     let main = client.guilds.cache.get(ids.main)
